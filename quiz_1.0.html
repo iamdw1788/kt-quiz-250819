@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>KT 공식 대리점 퀴즈 팝업</title>
+  <style>
+    :root {
+      --ink: #0f172a;
+      --ink-dim: #64748b;
+      --navy-900: #0b1220;
+      --navy-800: #0f172a;
+      --blue-500: #60a5fa;
+      --blue-600: #2563eb;
+      --blue-300: #93c5fd;
+      --cyan-300: #7dd3fc;
+      --warn: #ff4d6d;
+      --cta: #fff;
+      --cta-ink: #111
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap');
+
+    body {
+      margin: 0;
+      font-family: 'Pretendard', 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+      min-height: 100vh;
+    }
+
+    /* 딤 + 모달 컨테이너 */
+    .bp-ovl {
+      position: fixed;
+      inset: 0;
+      z-index: 2147483000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(147, 51, 234, 0.15) 0%, transparent 50%),
+        linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%);
+      padding: 20px;
+      backdrop-filter: blur(10px);
+    }
+
+    /* 카드형 팝업 */
+    .bp-top {
+      width: min(90vw, 380px);
+      border-radius: 24px;
+      overflow: hidden;
+      margin: 0;
+      box-shadow:
+        0 25px 80px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      color: #222;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(59, 130, 246, 0.8) 0%, transparent 50%),
+        radial-gradient(circle at 70% 80%, rgba(147, 51, 234, 0.6) 0%, transparent 50%),
+        linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #1e293b 100%);
+      position: relative;
+      transform: scale(0.9);
+      opacity: 0;
+      animation: popup 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards, cardFloat 4s ease-in-out infinite;
+    }
+
+    @keyframes cardFloat {
+
+      0%,
+      100% {
+        transform: scale(1) translateY(0px);
+      }
+
+      50% {
+        transform: scale(1) translateY(-8px);
+      }
+    }
+
+    @keyframes popup {
+      to {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .bp-close {
+      position: absolute;
+      right: 15px;
+      top: 15px;
+      border: 0;
+      background: #f1f5f9;
+      color: #64748b;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 300;
+      transition: all 0.3s ease;
+    }
+
+    .bp-close:hover {
+      background: rgba(0, 0, 0, 0.3);
+      transform: scale(1.1);
+    }
+
+    .bp-hero {
+      padding: 40px 24px 20px;
+      position: relative;
+      text-align: center;
+      color: #ffffff;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      background:
+        radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.3) 0%, transparent 70%);
+    }
+
+    /* 반짝이는 다이아몬드 효과 */
+    .bp-hero::before,
+    .bp-hero::after {
+      content: '✦';
+      position: absolute;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 20px;
+      animation: sparkle 2s ease-in-out infinite;
+    }
+
+    .bp-hero::before {
+      top: 20px;
+      left: 30px;
+      animation-delay: 0s;
+    }
+
+    .bp-hero::after {
+      top: 25px;
+      right: 40px;
+      animation-delay: 1s;
+      font-size: 16px;
+    }
+
+    @keyframes sparkle {
+
+      0%,
+      100% {
+        opacity: 0.3;
+        transform: scale(1) rotate(0deg);
+      }
+
+      50% {
+        opacity: 1;
+        transform: scale(1.2) rotate(180deg);
+      }
+    }
+
+    .bp-h1 {
+      margin: 0;
+      font-weight: 900;
+      font-size: 24px;
+      letter-spacing: -0.8px;
+      line-height: 1.3;
+      color: #ffffff;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .bp-sub {
+      margin-top: 6px;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 500;
+      display: block;
+      line-height: 1.5;
+    }
+
+    .bp-highlight {
+      background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+      color: #ffffff;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 14px;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      box-shadow:
+        0 4px 15px rgba(59, 130, 246, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      display: inline-block;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .bp-highlight::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+      0% {
+        transform: translateX(-100%) translateY(-100%) rotate(45deg);
+      }
+
+      100% {
+        transform: translateX(100%) translateY(100%) rotate(45deg);
+      }
+    }
+
+    /* 이미지 애니메이션 */
+    .bp-float {
+      animation: bp-float 3s ease-in-out infinite;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .bp-float:nth-child(2) {
+      animation-delay: 1.5s;
+    }
+
+    @keyframes bp-float {
+
+      0%,
+      100% {
+        transform: translateY(0px)
+      }
+
+      50% {
+        transform: translateY(-8px)
+      }
+    }
+
+    .bp-body {
+      padding: 24px 20px 28px;
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .bp-image-container {
+      position: relative;
+      width: 100%;
+      height: 250px;
+      margin-bottom: 20px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .bp-main-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      animation: bp-image-float 4s ease-in-out infinite;
+    }
+
+    @keyframes bp-image-float {
+
+      0%,
+      100% {
+        transform: translateY(0px) scale(1);
+      }
+
+      25% {
+        transform: translateY(-3px) scale(1.002);
+      }
+
+      50% {
+        transform: translateY(-6px) scale(1.005);
+      }
+
+      75% {
+        transform: translateY(-3px) scale(1.002);
+      }
+    }
+
+    .bp-touch-zone {
+      position: absolute;
+      top: 0;
+      height: 100%;
+      z-index: 2;
+      cursor: pointer;
+    }
+
+    .bp-touch-zone.left {
+      left: 0;
+      width: 50%;
+    }
+
+    .bp-touch-zone.right {
+      right: 0;
+      width: 50%;
+    }
+
+    .bp-item {
+      flex: 1;
+      cursor: pointer;
+      position: relative;
+      margin: 0;
+      transition: all 0.3s ease;
+      overflow: hidden;
+      background: white;
+    }
+
+    .bp-item:first-child {
+      border-radius: 0;
+    }
+
+    .bp-item:last-child {
+      border-radius: 0;
+    }
+
+    .bp-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .bp-thumb {
+      position: relative;
+      width: 100%;
+      height: 180px;
+      overflow: hidden;
+    }
+
+    .bp-thumb img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .3s ease;
+    }
+
+    .bp-item:hover .bp-thumb img {
+      transform: scale(1.05);
+    }
+
+    .bp-tag {
+      position: absolute;
+      left: 12px;
+      top: 12px;
+      font-size: 11px;
+      padding: 6px 12px;
+      border-radius: 16px;
+      background: rgba(248, 113, 113, .9);
+      color: #fff;
+      font-weight: 700;
+      backdrop-filter: blur(8px);
+    }
+
+    .bp-ribbon {
+      position: absolute;
+      left: -8px;
+      top: 12px;
+      background: linear-gradient(135deg, #1e40af 0%, #3730a3 100%);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 6px 16px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(30, 64, 175, .3);
+    }
+
+    .bp-cap {
+      display: none;
+    }
+
+    /* 이미지 하단 버튼 */
+    .bp-btn {
+      width: 100%;
+      border: 0;
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      color: white;
+      border-radius: 12px;
+      padding: 16px 20px;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+      display: block;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .bp-btn:hover {
+      background: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
+    }
+
+    .bp-btn:active {
+      transform: translateY(0);
+    }
+
+    .bp-warn {
+      display: none;
+      margin: 15px 0 0;
+      padding: 12px;
+      background: #fff5f5;
+      color: #dc2626;
+      border-radius: 8px;
+      font-size: 14px;
+      text-align: center;
+      font-weight: 500;
+      border: 1px solid #fecaca;
+    }
+
+    .bp-warn {
+      display: none;
+      margin-top: 16px;
+      font-size: 14px;
+      color: #ef4444;
+      text-align: center;
+      font-weight: 600;
+      background: #ffffff;
+      padding: 12px 20px;
+      border-radius: 16px;
+      backdrop-filter: blur(8px);
+    }
+
+    .bp-shake {
+      animation: bp-shake .4s ease-in-out
+    }
+
+    @keyframes bp-shake {
+
+      0%,
+      100% {
+        transform: translateX(0) scale(1)
+      }
+
+      25% {
+        transform: translateX(-8px) scale(1.02)
+      }
+
+      75% {
+        transform: translateX(8px) scale(1.02)
+      }
+    }
+
+    /* 결과 모달 */
+    .bp-ovl2 {
+      position: fixed;
+      inset: 0;
+      z-index: 2147483001;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(7, 10, 20, .55);
+      padding: 18px
+    }
+
+    .bp-card2 {
+      width: min(92vw, 420px);
+      border-radius: 18px;
+      box-shadow: 0 26px 60px rgba(0, 0, 0, .45);
+      padding: 18px 16px;
+      text-align: center;
+      color: #e6e9f2;
+      background:
+        radial-gradient(120% 120% at 110% -10%, rgba(96, 165, 250, .20), transparent 60%),
+        linear-gradient(180deg, #0f172a 0%, #0b1220 100%);
+      position: relative;
+      overflow: hidden
+    }
+
+    .bp-pop {
+      font-size: 20px;
+      font-weight: 900;
+      color: #fff
+    }
+
+    .bp-msg {
+      margin-top: 6px;
+      font-size: 14px;
+      color: #cbd5e1
+    }
+
+    .bp-cta {
+      margin-top: 18px;
+      border: 0;
+      background: #2563eb;
+      color: #fff;
+      border-radius: 999px;
+      padding: 14px 22px;
+      font-weight: 900;
+      cursor: pointer;
+      font-size: 17px;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, .08);
+      transition: background .15s
+    }
+
+    .bp-cta:hover {
+      background: #1746b0;
+    }
+
+    .bp-cta::after {
+      content: "›";
+      padding-left: 8px
+    }
+
+    /* 카드 내부 컨페티 */
+    .bp-fx {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      display: none;
+      opacity: 1
+    }
+
+    /* 퀴즈 선택지 호버 효과 */
+    .bp-choice:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .bp-choice:active {
+      transform: translateY(-1px) scale(1.01);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- 상단 톱시트 팝업 -->
+  <div class="bp-ovl" id="bpOvl" role="dialog" aria-modal="true">
+    <div class="bp-top" role="document">
+      <button class="bp-close" id="bpClose" aria-label="닫기">×</button>
+
+      <div class="bp-hero">
+        <h1 class="bp-h1">이 기회를 놓친다구요?🎁<br>퀴즈만 맞춰도</h1>
+        <div class="bp-sub" style="display: flex; justify-content: center; align-items: center;"><span
+            class="bp-highlight">5만원 할인쿠폰 즉시 지급!</span></div>
+      </div>
+
+      <div class="bp-body">
+        <div class="bp-quiz-question"
+          style="text-align: center; margin-bottom: 20px; font-size: 16px; font-weight: 600; color: #ffffff;">
+          Q. 신모델 폴더블7 개통 시 50% 먼저 할인<br>받을 수 있는 프로모션은?
+        </div>
+        <div class="bp-choices-container" style="display: flex; gap: 16px; margin-bottom: 20px;">
+          <div class="bp-choice" id="bpChoice1"
+            style="flex: 1; cursor: pointer; border-radius: 16px; overflow: hidden; background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); position: relative; transition: all 0.3s ease; border: 2px solid rgba(255, 255, 255, 0.1); box-shadow: 0 8px 25px rgba(59, 130, 246, 0.2);">
+            <div style="padding: 24px 16px; text-align: center;">
+              <div
+                style="font-size: 18px; font-weight: 800; color: #ffffff; margin-bottom: 12px; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+                1) 먼저보상</div>
+              <div
+                style="width: 80px; height: 80px; background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%); border-radius: 12px; margin: 0 auto; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px);">
+                <div
+                  style="width: 60px; height: 40px; background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%); border-radius: 6px; position: relative; border: 1px solid rgba(255, 255, 255, 0.1);">
+                  <div
+                    style="width: 40px; height: 25px; background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%); border-radius: 3px; position: absolute; top: 8px; left: 10px;">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="bp-choice" id="bpChoice2"
+            style="flex: 1; cursor: pointer; border-radius: 16px; overflow: hidden; background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); position: relative; transition: all 0.3s ease; border: 2px solid rgba(255, 255, 255, 0.1); box-shadow: 0 8px 25px rgba(139, 92, 246, 0.2);">
+            <div style="padding: 24px 16px; text-align: center;">
+              <div
+                style="font-size: 18px; font-weight: 800; color: #ffffff; margin-bottom: 12px; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+                2) 미리보상</div>
+              <div
+                style="width: 80px; height: 80px; background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%); border-radius: 12px; margin: 0 auto; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px);">
+                <div
+                  style="width: 60px; height: 40px; background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%); border-radius: 6px; position: relative; border: 1px solid rgba(255, 255, 255, 0.1);">
+                  <div
+                    style="width: 40px; height: 25px; background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%); border-radius: 3px; position: absolute; top: 8px; left: 10px;">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bp-warn" id="bpWarn">정답이 아니에요!</div>
+        <div class="bp-success-container" id="bpSuccessContainer"
+          style="display: none; margin-top: 20px; background: #ffffff; border-radius: 16px; padding: 20px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);">
+          <div class="bp-success-msg" id="bpSuccessMsg"
+            style="font-size: 16px; color: #374151; text-align: center; font-weight: 600; margin-bottom: 16px;">
+            🎉 정답입니다! 🎉<br>
+            <span style="color: #1e3a8a; font-size: 14px;">KT플라자에서 미리보상 & 5만원 추가 할인 혜택 꼭 챙기세요😊</span>
+          </div>
+          <button class="bp-btn" id="bpConfirmBtn"
+            style="margin: 0; background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); box-shadow: 0 4px 15px rgba(30, 58, 138, 0.3);">
+            쿠폰 받으러 가기 →
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- 결과 모달 -->
+  <div class="bp-ovl2" id="bpDone" role="dialog" aria-modal="true">
+    <div class="bp-card2" id="bpCard2">
+      <canvas class="bp-fx" id="bpFx"></canvas>
+      <div class="bp-pop">정답!</div>
+      <div class="bp-msg">KT 공식 대리점 방문 시 5만원 추가 할인 쿠폰 발급</div>
+      <button class="bp-cta" id="bpGo">쿠폰 받기</button>
+    </div>
+  </div>
+
+  <script>
+    // ===== 설정 =====
+    const BP = {
+      correct: 'choice1',   // 정답: 'choice1' (먼저보상) | 'choice2' (미리보상)
+      successUrl: 'https://kcms.baropage.com/coupon/SAA0000070?n=M%26S%EC%97%B0%EC%8B%A0%EB%82%B4%EC%97%AD%EC%A7%81%EC%98%81%EC%A0%90&c=1-221964649955&m=%ED%8F%B4%EB%8D%94%EB%B8%94%20%EC%8B%A0%EB%AA%A8%EB%8D%B8%20%EA%B8%B0%EB%B3%80%20%EC%95%88%EB%82%B4_20~40%EB%8C%80&k=dssfj_test_250729_08',
+      showDelayMs: 500,
+      useOnceKey: null   // 예: 'bp_evt_YYYYMMDD' 입력 시 1회만 노출
+    }
+
+    const $ = s => document.querySelector(s)
+    const ovl = $('#bpOvl'), done = $('#bpDone'), warn = $('#bpWarn')
+    const btnX = $('#bpClose'), go = $('#bpGo')
+
+    // 퀴즈 선택지 설정
+    const choice1 = document.getElementById('bpChoice1')
+    const choice2 = document.getElementById('bpChoice2')
+    const confirmBtn = document.getElementById('bpConfirmBtn')
+    const successMsg = document.getElementById('bpSuccessMsg')
+    const successContainer = document.getElementById('bpSuccessContainer')
+
+    // 선택지 클릭 이벤트
+    choice1.addEventListener('click', (e) => {
+      const rect = choice1.getBoundingClientRect()
+      const x = rect.left + rect.width / 2
+      const y = rect.top + rect.height / 2
+
+      // 정답 처리 (choice1이 정답)
+      if (BP.correct === 'choice1') {
+        confettiBurst(x, y)
+      }
+      onPick('choice1', choice1)
+    })
+
+    choice2.addEventListener('click', (e) => {
+      const rect = choice2.getBoundingClientRect()
+      const x = rect.left + rect.width / 2
+      const y = rect.top + rect.height / 2
+
+      // 정답 처리 (choice2가 정답인 경우)
+      if (BP.correct === 'choice2') {
+        confettiBurst(x, y)
+      }
+      onPick('choice2', choice2)
+    })
+
+    // 클릭 위치에 컨페티(팡팡 터지는) 효과
+    function confettiBurst(x, y) {
+      const colors = ['#22c55e', '#60a5fa', '#fbbf24', '#f472b6', '#38bdf8', '#a3e635'];
+      const N = 22;
+      for (let i = 0; i < N; i++) {
+        const conf = document.createElement('div');
+        const angle = (Math.PI * 2 * i) / N;
+        const dist = 60 + Math.random() * 30;
+        const dx = Math.cos(angle) * dist;
+        const dy = Math.sin(angle) * dist + 40 + Math.random() * 30;
+        conf.style.position = 'fixed';
+        conf.style.left = x + 'px';
+        conf.style.top = y + 'px';
+        conf.style.width = '10px';
+        conf.style.height = '10px';
+        conf.style.borderRadius = '50%';
+        conf.style.background = colors[Math.floor(Math.random() * colors.length)];
+        conf.style.opacity = '0.85';
+        conf.style.pointerEvents = 'none';
+        conf.style.zIndex = '9999';
+        conf.style.transform = 'scale(1)';
+        conf.style.transition = 'transform 0.7s cubic-bezier(.2,1.2,.4,1), opacity 0.7s';
+        document.body.appendChild(conf);
+        setTimeout(() => {
+          conf.style.transform = `translate(${dx}px, ${dy}px) scale(${0.7 + Math.random() * 0.7})`;
+          conf.style.opacity = '0';
+        }, 10);
+        setTimeout(() => {
+          if (conf.parentNode) conf.parentNode.removeChild(conf);
+        }, 800);
+      }
+    }
+
+    // 자동 진입: 상단 팝업
+    window.addEventListener('DOMContentLoaded', () => {
+      if (BP.useOnceKey && localStorage.getItem(BP.useOnceKey)) return
+      setTimeout(() => {
+        document.body.style.overflow = 'hidden'
+        ovl.style.display = 'flex'
+        if (BP.useOnceKey) localStorage.setItem(BP.useOnceKey, '1')
+      }, BP.showDelayMs)
+    })
+
+    btnX.addEventListener('click', () => closeTop())
+    go.addEventListener('click', () => location.href = BP.successUrl)
+    // 확인 버튼 클릭 시 화려한 컨페티 효과와 함께 다음 페이지로 이동
+    confirmBtn.addEventListener('click', (e) => {
+      // 버튼 위치에서 대형 컨페티 폭발 효과
+      const rect = confirmBtn.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      // 전체 화면 컨페티 효과
+      createFullScreenConfetti();
+
+      // 버튼에서 폭발하는 컨페티
+      createButtonConfetti(centerX, centerY);
+
+      // 1초 후 페이지 이동
+      setTimeout(() => {
+        location.href = BP.successUrl;
+      }, 1000);
+    });
+
+    function closeTop() {
+      ovl.style.display = 'none'
+      document.body.style.overflow = ''
+    }
+
+    function onPick(choice, el) {
+      const ok = choice === BP.correct
+      if (ok) {
+        // 정답일 때 성공 컨테이너 표시
+        successContainer.style.display = 'block'
+        warn.style.display = 'none'
+
+        // 정답 선택지 강조 효과
+        el.style.transform = 'scale(1.05)'
+        el.style.boxShadow = '0 8px 25px rgba(34, 197, 94, 0.3)'
+        el.style.border = '3px solid #22c55e'
+
+        // 선택지 비활성화
+        choice1.style.pointerEvents = 'none'
+        choice2.style.pointerEvents = 'none'
+      } else {
+        // 오답일 때 경고 메시지 표시
+        warn.style.display = 'block'
+        successContainer.style.display = 'none'
+        el.classList.remove('bp-shake')
+        void el.offsetWidth // 리플로우 강제 실행
+        el.classList.add('bp-shake')
+
+        // 오답 선택지 효과
+        el.style.border = '3px solid #ef4444'
+        el.style.opacity = '0.7'
+
+        setTimeout(() => {
+          warn.style.display = 'none'
+          el.style.border = 'none'
+          el.style.opacity = '1'
+        }, 1500)
+      }
+    }
+
+    // 결과 모달 + 카드 내부 컨페티
+    function showDone() {
+      done.style.display = 'flex'
+      const fx = document.getElementById('bpFx')
+      const card = document.getElementById('bpCard2')
+      fx.style.display = 'block'
+      fx.style.opacity = '1'
+      fx.width = card.clientWidth
+      fx.height = card.clientHeight
+      confettiInCanvas(fx, 1000, 350)    // 1초 낙하 + 0.35초 페이드아웃
+    }
+
+    // 전체 화면 컨페티 효과
+    function createFullScreenConfetti() {
+      const colors = ['#fbbf24', '#f59e0b', '#60a5fa', '#3b82f6', '#10b981', '#06d6a0', '#f472b6', '#ec4899'];
+      const confettiCount = 150;
+
+      for (let i = 0; i < confettiCount; i++) {
+        setTimeout(() => {
+          const confetti = document.createElement('div');
+          confetti.style.position = 'fixed';
+          confetti.style.left = Math.random() * window.innerWidth + 'px';
+          confetti.style.top = '-10px';
+          confetti.style.width = (8 + Math.random() * 8) + 'px';
+          confetti.style.height = (8 + Math.random() * 8) + 'px';
+          confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+          confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+          confetti.style.zIndex = '9999';
+          confetti.style.pointerEvents = 'none';
+          confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+          confetti.style.transition = 'all 3s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+
+          document.body.appendChild(confetti);
+
+          // 애니메이션 시작
+          setTimeout(() => {
+            confetti.style.top = (window.innerHeight + 50) + 'px';
+            confetti.style.left = (parseInt(confetti.style.left) + (-200 + Math.random() * 400)) + 'px';
+            confetti.style.transform = `rotate(${Math.random() * 720}deg) scale(0.5)`;
+            confetti.style.opacity = '0';
+          }, 50);
+
+          // 제거
+          setTimeout(() => {
+            if (confetti.parentNode) {
+              confetti.parentNode.removeChild(confetti);
+            }
+          }, 3500);
+        }, i * 20);
+      }
+    }
+
+    // 버튼에서 폭발하는 컨페티
+    function createButtonConfetti(centerX, centerY) {
+      const colors = ['#fbbf24', '#f59e0b', '#60a5fa', '#3b82f6', '#10b981', '#06d6a0'];
+      const burstCount = 80;
+
+      for (let i = 0; i < burstCount; i++) {
+        const confetti = document.createElement('div');
+        const angle = (Math.PI * 2 * i) / burstCount;
+        const velocity = 150 + Math.random() * 100;
+        const size = 6 + Math.random() * 8;
+
+        confetti.style.position = 'fixed';
+        confetti.style.left = centerX + 'px';
+        confetti.style.top = centerY + 'px';
+        confetti.style.width = size + 'px';
+        confetti.style.height = size + 'px';
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.borderRadius = Math.random() > 0.3 ? '50%' : '0';
+        confetti.style.zIndex = '9999';
+        confetti.style.pointerEvents = 'none';
+        confetti.style.transition = 'all 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+
+        document.body.appendChild(confetti);
+
+        // 폭발 애니메이션
+        setTimeout(() => {
+          const dx = Math.cos(angle) * velocity;
+          const dy = Math.sin(angle) * velocity + Math.random() * 100;
+          confetti.style.transform = `translate(${dx}px, ${dy}px) rotate(${Math.random() * 720}deg) scale(0.3)`;
+          confetti.style.opacity = '0';
+        }, 50);
+
+        // 제거
+        setTimeout(() => {
+          if (confetti.parentNode) {
+            confetti.parentNode.removeChild(confetti);
+          }
+        }, 2000);
+      }
+    }
+
+    // 브랜드 컬러 컨페티 + 페이드아웃
+    function confettiInCanvas(canvas, duration = 900, fade = 300) {
+      const ctx = canvas.getContext('2d')
+      const W = canvas.width, H = canvas.height
+      const colors = ['#60a5fa', '#2563eb', '#7dd3fc', '#93c5fd', '#ffffff']
+      const N = 120
+      const parts = Array.from({ length: N }).map(() => ({
+        x: Math.random() * W, y: -Math.random() * H * .1, r: 3 + Math.random() * 5,
+        vx: -1 + Math.random() * 2, vy: 2 + Math.random() * 4,
+        c: colors[(Math.random() * colors.length) | 0]
+      }))
+      const t0 = performance.now()
+        ; (function loop(t) {
+          const el = t - t0
+          ctx.clearRect(0, 0, W, H)
+          parts.forEach(p => {
+            p.x += p.vx; p.y += p.vy
+            ctx.fillStyle = p.c
+            ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill()
+          })
+          if (el < duration) requestAnimationFrame(loop)
+          else {
+            canvas.style.transition = `opacity ${fade}ms ease`
+            canvas.style.opacity = '0'
+            setTimeout(() => {
+              ctx.clearRect(0, 0, W, H)
+              canvas.style.display = 'none'
+              canvas.style.transition = ''
+              canvas.style.opacity = '1'
+            }, fade)
+          }
+        })(t0)
+    }
+  </script>
+</body>
+
+</html>
