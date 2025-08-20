@@ -424,7 +424,7 @@
       display: none;
       margin-top: 16px;
       font-size: 14px;
-      color: #ef4444;
+      color: #4b5563;
       text-align: center;
       font-weight: 600;
       background: #ffffff;
@@ -545,13 +545,13 @@
       <div class="bp-hero">
         <h1 class="bp-h1">이 기회를 놓친다구요?🎁<br>퀴즈만 맞춰도</h1>
         <div class="bp-sub" style="display: flex; justify-content: center; align-items: center;"><span
-            class="bp-highlight">5만원 할인쿠폰 즉시 지급!</span></div>
+            class="bp-highlight">개통 시 5만원 할인쿠폰 즉시 지급!</span></div>
       </div>
 
       <div class="bp-body">
         <div class="bp-quiz-question"
           style="text-align: center; margin-bottom: 20px; font-size: 16px; font-weight: 600; color: #ffffff;">
-          Q. 신모델 폴더블7 개통 시 50% 먼저 할인<br>받을 수 있는 프로모션은?
+          Q. 신모델 폴더블7 개통 시 50%를 미리 할인<br>받을 수 있는 혜택은?
         </div>
         <div class="bp-choices-container" style="display: flex; gap: 16px; margin-bottom: 20px;">
           <div class="bp-choice" id="bpChoice1"
@@ -589,13 +589,16 @@
             </div>
           </div>
         </div>
-        <div class="bp-warn" id="bpWarn">정답이 아니에요!</div>
+        <div class="bp-warn" id="bpWarn">아쉽지만 오답! 아래 링크에서<br>정답 확인하고 다시 도전해보세요! <a
+            href="https://link.naver.com/bridge?url=https%3A%2F%2Fproduct.kt.com%2FwDic%2FproductDetail.do%3FItemCode%3D1654&dst=naversearchapp%3A%2F%2Finappbrowser%3Furl%3Dhttps%253A%252F%252Fproduct.kt.com%252FwDic%252FproductDetail.do%253FItemCode%253D1654%26version%3D10%26sourceReferer%3Dshare"
+            target="_blank" style="color: #2563eb; text-decoration: underline;">[바로가기]</a></div>
         <div class="bp-success-container" id="bpSuccessContainer"
           style="display: none; margin-top: 20px; background: #ffffff; border-radius: 16px; padding: 20px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);">
           <div class="bp-success-msg" id="bpSuccessMsg"
             style="font-size: 16px; color: #374151; text-align: center; font-weight: 600; margin-bottom: 16px;">
             🎉 정답입니다! 🎉<br>
-            <span style="color: #1e3a8a; font-size: 14px;">KT플라자에서 미리보상 & 5만원 추가 할인 혜택 꼭 챙기세요😊</span>
+            <span style="color: #1e3a8a; font-size: 14px;">KT플라자에서 미리보상 & 5만원 추가<br>할인 혜택 꼭 챙기세요! <br> *본 혜택은 상단에 기재된 매장에서
+              사용 가능합니다</span>
           </div>
           <button class="bp-btn" id="bpConfirmBtn"
             style="margin: 0; background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); box-shadow: 0 4px 15px rgba(30, 58, 138, 0.3);">
@@ -620,7 +623,7 @@
   <script>
     // ===== 설정 =====
     const BP = {
-      correct: 'choice1',   // 정답: 'choice1' (먼저보상) | 'choice2' (미리보상)
+      correct: 'choice2',   // 정답: 'choice1' (먼저보상) | 'choice2' (미리보상)
       successUrl: 'https://kcms.baropage.com/coupon/SAA0000070?n=M%26S%EC%97%B0%EC%8B%A0%EB%82%B4%EC%97%AD%EC%A7%81%EC%98%81%EC%A0%90&c=1-221964649955&m=%ED%8F%B4%EB%8D%94%EB%B8%94%20%EC%8B%A0%EB%AA%A8%EB%8D%B8%20%EA%B8%B0%EB%B3%80%20%EC%95%88%EB%82%B4_20~40%EB%8C%80&k=dssfj_test_250729_08',
       showDelayMs: 500,
       useOnceKey: null   // 예: 'bp_evt_YYYYMMDD' 입력 시 1회만 노출
@@ -762,7 +765,7 @@
           warn.style.display = 'none'
           el.style.border = 'none'
           el.style.opacity = '1'
-        }, 1500)
+        }, 2500)
       }
     }
 
